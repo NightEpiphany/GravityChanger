@@ -1,71 +1,25 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "gravity_changer.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "AbstractArrowMixin",
-    "AbstractHorseMixin",
-    "AbstractMinecartMixin",
-    "AbstractSkeletonMixin",
-    "AreaEffectCloudMixin",
-    "BegGoalMixin",
-    "BoatMixin",
-    "CrossbowItemMixin",
-    "DirectionMixin",
-    "DrownedMixin",
-    "EndermanMixin",
-    "EntityAccessor",
-    "EntityCollisionContextMixin",
-    "EntityMixin",
-    "ExperienceBottleItemMixin",
-    "ExplosionMixin",
-    "FireworkRocketMixin",
-    "FoxMixin",
-    "IllusionerMixin",
-    "ItemMixin",
-    "LivingEntityMixin",
-    "LookAtPlayerGoalMixin",
-    "LookControlMixin",
-    "MobMixin",
-    "PiglinMixin",
-    "PillagerMixin",
-    "PistonMovingBlockEntityMixin",
-    "PlayerListMixin",
-    "PlayerMixin",
-    "PointedDripstoneBlockMixin",
-    "ProjectileMixin",
-    "RamTargetMixin",
-    "ServerGamePacketListenerImplMixin",
-    "ShulkerBoxBlockEntityMixin",
-    "ShulkerMixin",
-    "SnowGolemMixin",
-    "ThrowablePotionItemMixin",
-    "ThrowableProjectileMixin",
-    "ThrownExperienceBottleMixin",
-    "ThrownPotionMixin",
-    "UseOnContextMixin",
-    "WitchMixin",
-    "WitherBossMixin",
-    "debug.MixinEntity_Debug",
-    "fall_distance.ServerPlayerMixin_FallDistance",
-    "item.BehaviorUtilsMixin"
-  ],
-  "client": [
-    "client.BiomeAmbientSoundHandlerMixin",
-    "client.CameraMixin",
-    "client.ClientPacketListenerMixin",
-    "client.EntityRenderDispatcherMixin",
-    "client.EntityRenderMixin",
-    "client.FishingHookEntityRendererMixin",
-    "client.GameRendererMixin",
-    "client.ItemPickupParticleMixin",
-    "client.LocalPlayerEntityMixin",
-    "client.PlayerRendererMixin",
-    "client.RemotePlayerEntityMixin",
-    "client.ScreenEffectRendererMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "com.moigferdsrte.gravitychanger.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"EntityMixin",
+		"LivingEntityMixin",
+		"PlayerMixin"
+	],
+	"client": [
+		"client.CameraMixin",
+		"client.EntityRenderDispatcherMixin",
+		"client.EntityRenderStateMixin",
+		"client.EntityRendererMixin",
+		"client.GuiEntityRendererMixin",
+		"client.LocalPlayerMixin",
+		"client.ScreenEffectRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
 }

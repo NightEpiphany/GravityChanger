@@ -2,66 +2,29 @@
 	"schemaVersion": 1,
 	"id": "gravity_changer",
 	"version": "${version}",
-	"name": "Gravity Changer",
-	"description": "Let you change gravity",
+	"name": "GravityChanger",
+	"description": "Multiple directional gravity choices for a refreshed survival experience.",
 	"authors": [
-    "Gaider10",
-    "Fusion Flux",
-    "qouteall",
-    "CyborgCabbage",
-	"NightEpiphany",
-    "other contributors (see GitHub)"
+		"NightEpiphany"
 	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
 	"license": "MIT",
 	"icon": "assets/gravity_changer/icon.png",
 	"environment": "*",
 	"entrypoints": {
-        "preLaunch": [
-            "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
-        ],
 		"main": [
-			"gravity_changer.GravityChangerMod"
+			"com.moigferdsrte.gravitychanger.GravityChanger"
 		],
 		"client": [
-		  "gravity_changer.GravityChangerModClient"
-		],
-		"modmenu": [
-		  "gravity_changer.ModMenuIntegration"
-		],
-		"cardinal-components": [
-		  "gravity_changer.GravityChangerComponents"
+			"com.moigferdsrte.gravitychanger.GravityChangerClient"
 		]
 	},
 	"mixins": [
 		"gravity_changer.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.21.1",
-		"java": ">=21",
-		"fabric-api": "*",
-		"cloth-config2": "*",
-		"modmenu": "*",
-		"cardinal-components-base": "*",
-		"cardinal-components-entity": "*"
-	},
-	"suggests": {
-		"sodium": "*",
-		"lithium": "*"
-	},
-	"accessWidener": "gc.accesswidener",
-	  "custom": {
-		"cardinal-components": [
-		  "gravity_changer:gravity_data",
-		  "gravity_changer:dimension_data"
-		],
-		"lithium:options": {
-		  "mixin.entity.collisions": false,
-		  "mixin.entity.fast_suffocation_check": false
-		}
-	  }
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
 }

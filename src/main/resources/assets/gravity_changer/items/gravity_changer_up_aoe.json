@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "gravity_changer:item/gravity_changer_up_aoe"
+  }
+}
