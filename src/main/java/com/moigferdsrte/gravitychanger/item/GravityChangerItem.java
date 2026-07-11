@@ -2,6 +2,7 @@ package com.moigferdsrte.gravitychanger.item;
 
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +16,12 @@ public class GravityChangerItem extends DirectionalGravityItem{
     }
 
     @Override
-    public @NonNull InteractionResult use(final Level level, final @NonNull Player player, final @NonNull InteractionHand hand) {
+    public @NonNull InteractionResult use(final @NonNull Level level, final @NonNull Player player, final @NonNull InteractionHand hand) {
+        if (GravityDirectionUtil.getOwnGravityDirection(player).equals(this.getDirection())) {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CRAFTER_FAIL, player.getSoundSource(), 1.0F, 0.5F);
+            return InteractionResult.CONSUME;
+        }
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK, player.getSoundSource(), 1.0F, 1.0F);
         if (!level.isClientSide()) {
             return GravityDirectionUtil.setGravityDirectionWithDownLift(player, this.getDirection()) ? InteractionResult.SUCCESS_SERVER : InteractionResult.PASS;
         }

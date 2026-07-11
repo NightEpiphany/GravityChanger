@@ -13,11 +13,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
@@ -144,6 +146,35 @@ public abstract class EntityMixin {
         if (gravityDirection != Direction.DOWN) {
             cir.setReturnValue(entity.position().y + gravitychanger$getDirectionalEyeOffset(gravityDirection).y);
         }
+    }
+
+    @Inject(method = "isInWall", at = @At("HEAD"), cancellable = true)
+    private void gravitychanger$checkDirectionalEyeInWall(final CallbackInfoReturnable<Boolean> cir) {
+        Entity entity = (Entity)(Object)this;
+        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(entity);
+        if (!(entity instanceof Player) || !gravityDirection.getAxis().isHorizontal()) {
+            return;
+        }
+
+        if (entity.noPhysics) {
+            cir.setReturnValue(false);
+            return;
+        }
+
+        float checkWidth = this.dimensions.width() * 0.8F;
+        AABB localEyeBox = AABB.ofSize(Vec3.ZERO, checkWidth, 1.0E-6, checkWidth);
+        AABB eyeBox = RotationUtil.boxPlayerToWorld(localEyeBox, gravityDirection).move(entity.getEyePosition());
+        boolean inWall = BlockPos.betweenClosedStream(eyeBox).anyMatch(pos -> {
+            BlockState state = this.level().getBlockState(pos);
+            return !state.isAir()
+                && state.isSuffocating(this.level(), pos)
+                && Shapes.joinIsNotEmpty(
+                    state.getCollisionShape(this.level(), pos).move(pos),
+                    Shapes.create(eyeBox),
+                    BooleanOp.AND
+                );
+        });
+        cir.setReturnValue(inWall);
     }
 
     @Inject(method = "checkSupportingBlock", at = @At("HEAD"), cancellable = true)
