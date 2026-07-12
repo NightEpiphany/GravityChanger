@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
+@SuppressWarnings("unused")
 public final class GravityDirectionUtil {
     public static final double DEFAULT_GRAVITY_STRENGTH = 9.8;
     public static final double MIN_GRAVITY_STRENGTH = 5.0;
@@ -70,6 +71,7 @@ public final class GravityDirectionUtil {
         return true;
     }
 
+    @SuppressWarnings("all")
     public static double getGravityStrength(final Entity entity) {
         if (entity instanceof LivingEntity living) {
             AttributeMap attributes = living.getAttributes();
@@ -81,12 +83,40 @@ public final class GravityDirectionUtil {
         return DEFAULT_GRAVITY_STRENGTH;
     }
 
+    @SuppressWarnings("all")
+    public static void setGravityStrength(final Entity entity, final double gravityStrength) {
+        if (entity instanceof LivingEntity living) {
+            AttributeMap attributes = living.getAttributes();
+            if (attributes != null && attributes.hasAttribute(ModAttributes.GRAVITY_STRENGTH)) {
+                attributes.getInstance(ModAttributes.GRAVITY_STRENGTH).setBaseValue(gravityStrength);
+            }
+        }
+    }
+
     public static double getGravityScale(final Entity entity) {
-        return getGravityStrength(entity) / DEFAULT_GRAVITY_STRENGTH;
+        return getGravityScale(getGravityStrength(entity));
+    }
+
+    public static double getGravityScale(final double gravityStrength) {
+        return gravityStrength / DEFAULT_GRAVITY_STRENGTH;
     }
 
     public static double scaleGravity(final Entity entity, final double gravity) {
-        return gravity * getGravityScale(entity);
+        return scaleGravity(gravity, getGravityStrength(entity));
+    }
+
+    public static double scaleGravity(final double gravity, final double gravityStrength) {
+        return gravity * getGravityScale(gravityStrength);
+    }
+
+    public static double getEffectiveGravity(
+        final double gravity,
+        final double localVerticalVelocity,
+        final boolean hasSlowFalling
+    ) {
+        return localVerticalVelocity <= 0.0 && hasSlowFalling
+            ? Math.min(gravity, 0.01)
+            : gravity;
     }
 
     public static double getJumpVelocityScale(final Entity entity) {
@@ -114,13 +144,24 @@ public final class GravityDirectionUtil {
     }
 
     public static Vec3 getGravityVector(final Entity entity, final double gravity) {
-        Direction direction = getGravityDirection(entity);
-        double scaledGravity = scaleGravity(entity, gravity);
+        return getGravityVector(getGravityDirection(entity), gravity, getGravityStrength(entity));
+    }
+
+    public static Vec3 getGravityVector(
+        final Direction direction,
+        final double gravity,
+        final double gravityStrength
+    ) {
+        double scaledGravity = scaleGravity(gravity, gravityStrength);
         return new Vec3(
             direction.getStepX() * scaledGravity,
             direction.getStepY() * scaledGravity,
             direction.getStepZ() * scaledGravity
         );
+    }
+
+    public static boolean isMovingAgainstGravity(final Vec3 worldMovement, final Direction gravityDirection) {
+        return RotationUtil.vecWorldToPlayer(worldMovement, gravityDirection).y > 0.0;
     }
 
     public static Vec3 applyGravity(final Entity entity, final Vec3 movement, final double gravity) {

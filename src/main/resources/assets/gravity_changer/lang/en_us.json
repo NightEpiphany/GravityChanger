@@ -19,9 +19,17 @@
   "item.gravity_changer.gravity_anchor_south": "South Gravity Anchor",
   "item.gravity_changer.gravity_anchor_west": "West Gravity Anchor",
   "item.gravity_changer.gravity_anchor_east": "East Gravity Anchor",
+  
+  "item.gravity_changer.gravity_increaser": "Gravity Increser",
+  "item.gravity_changer.gravity_increaser_aoe": "Gravity Increser AOE",
+  "item.gravity_changer.gravity_decreaser": "Gravity Decreser",
+  "item.gravity_changer.gravity_decreaser_aoe": "Gravity Decreser AOE",
 
   "attribute.name.gravity_changer.gravity_direction": "Gravity Direction",
   "attribute.name.gravity_changer.gravity_strength": "Gravity Strength",
-  "item_group.gravity_changer.name": "Gravity Changer"
+  "item_group.gravity_changer.name": "Gravity Changer",
+  "tooltip.gravity_changer.gravity_intensity_modified": "Current Intensity set to: %s",
+  "tooltip.gravity_changer.gravity_intensity_minimal": "Current Intensity: 5. Gravity strength cannot be decreased any further!",
+  "tooltip.gravity_changer.gravity_intensity_maximal": "Current Intensity: 15. Gravity strength cannot be increased any further!"
   
 }

@@ -23,6 +23,13 @@ dependencies {
 	implementation("maven.modrinth:cloth-config:${providers.gradleProperty("cloth_config_version").get()}")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
+	testImplementation(platform("org.junit:junit-bom:5.13.4"))
+	testImplementation("org.junit.jupiter:junit-jupiter")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+	useJUnitPlatform()
 }
 
 tasks.processResources {

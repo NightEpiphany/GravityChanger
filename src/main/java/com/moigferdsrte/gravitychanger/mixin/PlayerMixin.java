@@ -68,12 +68,12 @@ public abstract class PlayerMixin {
             target = "Lnet/minecraft/world/entity/EntityDimensions;makeBoundingBox(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/AABB;"
         )
     )
-    private AABB gravitychanger$makeDirectionalPoseBoundingBox(final EntityDimensions dimensions, final Vec3 position) {
+    private AABB gravitychanger$makeDirectionalPoseBoundingBox(final EntityDimensions dimensions, final Vec3 pos) {
         Player player = (Player)(Object)this;
         Direction gravityDirection = GravityDirectionUtil.getGravityDirection(player);
         return gravityDirection == Direction.DOWN
-            ? dimensions.makeBoundingBox(position)
-            : RotationUtil.makeBoxFromDimensions(dimensions, gravityDirection, position);
+            ? dimensions.makeBoundingBox(pos)
+            : RotationUtil.makeBoxFromDimensions(dimensions, gravityDirection, pos);
     }
 
     @Inject(

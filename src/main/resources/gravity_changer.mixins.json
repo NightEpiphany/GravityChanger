@@ -5,7 +5,8 @@
 	"mixins": [
 		"EntityMixin",
 		"LivingEntityMixin",
-		"PlayerMixin"
+		"PlayerMixin",
+		"ServerGamePacketListenerImplMixin"
 	],
 	"client": [
 		"client.CameraMixin",

@@ -1,9 +1,7 @@
 package com.moigferdsrte.gravitychanger.init;
 
 import com.moigferdsrte.gravitychanger.GravityChanger;
-import com.moigferdsrte.gravitychanger.item.GravityAnchorItem;
-import com.moigferdsrte.gravitychanger.item.GravityChangerAOEItem;
-import com.moigferdsrte.gravitychanger.item.GravityChangerItem;
+import com.moigferdsrte.gravitychanger.item.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,6 +38,14 @@ public final class ModItems {
     public static final Item GRAVITY_CHANGER_WEST_AOE = registerItem("gravity_changer_west_aoe", p -> new GravityChangerAOEItem(Direction.WEST, p), new Item.Properties());
     public static final Item GRAVITY_CHANGER_UP_AOE = registerItem("gravity_changer_up_aoe", p -> new GravityChangerAOEItem(Direction.UP, p), new Item.Properties());
     public static final Item GRAVITY_CHANGER_DOWN_AOE = registerItem("gravity_changer_down_aoe", p -> new GravityChangerAOEItem(Direction.DOWN, p), new Item.Properties());
+
+    public static final Item GRAVITY_INCREASER = registerItem("gravity_increaser", p -> new GravityModificationItem(ModifiableGravityItem.Modify.INCREASE, p), new Item.Properties());
+
+    public static final Item GRAVITY_DECREASER = registerItem("gravity_decreaser", p -> new GravityModificationItem(ModifiableGravityItem.Modify.DECREASE, p), new Item.Properties());
+
+    public static final Item GRAVITY_INCREASER_AOE = registerItem("gravity_increaser_aoe", p -> new GravityModificationAOEItem(ModifiableGravityItem.Modify.INCREASE, p), new Item.Properties());
+
+    public static final Item GRAVITY_DECREASER_AOE = registerItem("gravity_decreaser_aoe", p -> new GravityModificationAOEItem(ModifiableGravityItem.Modify.DECREASE, p), new Item.Properties());
     private static Item registerItem(final String id, final Function<Item.Properties, Item> itemFactory, final Item.Properties properties) {
         Item item = itemFactory.apply(properties.setId(ResourceKey.create(Registries.ITEM, GravityChanger.id(id))));
 

@@ -21,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -118,7 +119,12 @@ public abstract class LivingEntityMixin extends Entity {
         if (levitationEffect != null) {
             localY += (0.05 * (levitationEffect.getAmplifier() + 1) - localMovement.y) * 0.2;
         } else if (!entity.level().isClientSide() || entity.level().hasChunkAt(posBelow)) {
-            localY -= GravityDirectionUtil.scaleGravity(entity, this.getEffectiveGravity());
+            double effectiveGravity = GravityDirectionUtil.getEffectiveGravity(
+                entity.getGravity(),
+                localMovement.y,
+                entity.hasEffect(MobEffects.SLOW_FALLING)
+            );
+            localY -= GravityDirectionUtil.scaleGravity(entity, effectiveGravity);
         } else if (entity.getY() > entity.level().getMinY()) {
             localY = -0.1;
         } else {
@@ -234,7 +240,7 @@ public abstract class LivingEntityMixin extends Entity {
         )
     )
     private Vec3 gravitychanger$goDownInLocalWater(final Vec3 movement, final double x, final double y, final double z) {
-        Direction gravityDirection = GravityDirectionUtil.getGravityDirection((Entity)(Object)this);
+        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(this);
         return gravityDirection == Direction.DOWN ? movement.add(x, y, z) : movement.add(RotationUtil.vecPlayerToWorld(x, y, z, gravityDirection));
     }
 
@@ -246,7 +252,7 @@ public abstract class LivingEntityMixin extends Entity {
         )
     )
     private Vec3 gravitychanger$jumpInLocalLiquid(final Vec3 movement, final double x, final double y, final double z) {
-        Direction gravityDirection = GravityDirectionUtil.getGravityDirection((Entity)(Object)this);
+        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(this);
         return gravityDirection == Direction.DOWN ? movement.add(x, y, z) : movement.add(RotationUtil.vecPlayerToWorld(x, y, z, gravityDirection));
     }
 
@@ -258,7 +264,7 @@ public abstract class LivingEntityMixin extends Entity {
         )
     )
     private AABB gravitychanger$makeDirectionalPoseBox(final EntityDimensions dimensions, final Vec3 pos) {
-        Direction gravityDirection = GravityDirectionUtil.getGravityDirection((Entity)(Object)this);
+        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(this);
         return RotationUtil.makeBoxFromDimensions(dimensions, gravityDirection, pos);
     }
 
@@ -275,42 +281,7 @@ public abstract class LivingEntityMixin extends Entity {
             : 0.0;
     }
 
-    @Redirect(
-        method = "travelInAir",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(DDD)V",
-            ordinal = 0
-        )
-    )
-    private void gravitychanger$applyDirectionalGravityWithoutFriction(
-        final LivingEntity entity,
-        final double x,
-        final double y,
-        final double z
-    ) {
-        Vec3 movement = GravityDirectionUtil.applyGravity(entity, new Vec3(x, y, z), entity.getGravity());
-        entity.setDeltaMovement(movement);
-    }
-
-    @Redirect(
-        method = "travelInAir",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(DDD)V",
-            ordinal = 1
-        )
-    )
-    private void gravitychanger$applyDirectionalGravityWithFriction(
-        final LivingEntity entity,
-        final double x,
-        final double y,
-        final double z
-    ) {
-        Vec3 movement = GravityDirectionUtil.applyGravity(entity, new Vec3(x, y, z), entity.getGravity());
-        entity.setDeltaMovement(movement);
-    }
-
+    @Unique
     private float gravitychanger$getScaledJumpPower(final LivingEntity entity) {
         return (float)(this.getJumpPower() * GravityDirectionUtil.getJumpVelocityScale(entity));
     }

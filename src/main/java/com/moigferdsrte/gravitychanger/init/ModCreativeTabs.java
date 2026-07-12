@@ -20,6 +20,8 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.GRAVITY_CHANGER_WEST);
                     output.accept(ModItems.GRAVITY_CHANGER_UP);
                     output.accept(ModItems.GRAVITY_CHANGER_DOWN);
+                    output.accept(ModItems.GRAVITY_INCREASER);
+                    output.accept(ModItems.GRAVITY_DECREASER);
 
                     output.accept(ModItems.GRAVITY_CHANGER_NORTH_AOE);
                     output.accept(ModItems.GRAVITY_CHANGER_EAST_AOE);
@@ -27,6 +29,8 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.GRAVITY_CHANGER_WEST_AOE);
                     output.accept(ModItems.GRAVITY_CHANGER_UP_AOE);
                     output.accept(ModItems.GRAVITY_CHANGER_DOWN_AOE);
+                    output.accept(ModItems.GRAVITY_INCREASER_AOE);
+                    output.accept(ModItems.GRAVITY_DECREASER_AOE);
 
                     output.accept(ModItems.GRAVITY_ANCHOR_NORTH);
                     output.accept(ModItems.GRAVITY_ANCHOR_EAST);
