@@ -26,5 +26,12 @@
   "item_group.gravity_changer.name": "重力变换",
   "tooltip.gravity_changer.gravity_intensity_modified": "当前重力强度: %s",
   "tooltip.gravity_changer.gravity_intensity_minimal": "当前重力强度: 5 已达最小值！",
-  "tooltip.gravity_changer.gravity_intensity_maximal": "当前重力强度: 15 已达最大值！"
+  "tooltip.gravity_changer.gravity_intensity_maximal": "当前重力强度: 15 已达最大值！",
+  "config.gravity_changer.title": "重力变换配置",
+  "config.gravity_changer.category.safety": "安全机制",
+  "config.gravity_changer.directional_fall_limit_enabled": "异向重力坠落时间限制",
+  "config.gravity_changer.directional_fall_limit_enabled.tooltip": "非下方重力的连续坠落超过设定时间后，实体将受到类似虚空的持续伤害。",
+  "config.gravity_changer.directional_fall_limit_seconds": "最大坠落时间",
+  "config.gravity_changer.directional_fall_limit_seconds.tooltip": "开始受到持续虚空伤害前允许的最长连续坠落时间。",
+  "config.gravity_changer.seconds": "%s 秒"
 }

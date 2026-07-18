@@ -1,6 +1,9 @@
 package com.moigferdsrte.gravitychanger.mixin;
 
+import com.moigferdsrte.gravitychanger.config.GravityChangerConfig;
+import com.moigferdsrte.gravitychanger.config.GravityChangerConfigManager;
 import com.moigferdsrte.gravitychanger.init.ModAttributes;
+import com.moigferdsrte.gravitychanger.util.DirectionalFallTracker;
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -14,7 +17,9 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
@@ -30,6 +35,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
+    @Unique
+    private static final double GRAVITYCHANGER_MINIMUM_FALL_SPEED = 1.0E-5;
+
+    @Unique
+    private static final float GRAVITYCHANGER_VOID_DAMAGE = 4.0F;
+
+    @Unique
+    private final DirectionalFallTracker gravitychanger$directionalFallTracker = new DirectionalFallTracker();
 
     public LivingEntityMixin(EntityType<?> type, Level level) {
         super(type, level);
@@ -71,6 +84,28 @@ public abstract class LivingEntityMixin extends Entity {
         cir.getReturnValue()
             .add(ModAttributes.GRAVITY_DIRECTION)
             .add(ModAttributes.GRAVITY_STRENGTH);
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void gravitychanger$limitDirectionalFallTime(final CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity)(Object)this;
+        GravityChangerConfig config = GravityChangerConfigManager.get();
+        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(entity);
+        boolean creativePlayer = entity instanceof Player player && player.isCreative();
+        boolean falling = config.directionalFallLimitEnabled()
+            && entity.level() instanceof ServerLevel
+            && gravityDirection != Direction.DOWN
+            && !creativePlayer
+            && !entity.onGround()
+            && !entity.isPassenger()
+            && !entity.isNoGravity()
+            && RotationUtil.vecWorldToPlayer(entity.getDeltaMovement(), gravityDirection).y < -GRAVITYCHANGER_MINIMUM_FALL_SPEED;
+        int maximumTicks = config.directionalFallLimitSeconds() * 20;
+
+        if (this.gravitychanger$directionalFallTracker.tick(gravityDirection, falling, maximumTicks)
+            && entity.level() instanceof ServerLevel serverLevel) {
+            entity.hurtServer(serverLevel, entity.damageSources().fellOutOfWorld(), GRAVITYCHANGER_VOID_DAMAGE);
+        }
     }
 
     @Inject(method = "jumpFromGround", at = @At("HEAD"), cancellable = true)

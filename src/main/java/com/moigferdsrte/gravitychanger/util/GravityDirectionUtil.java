@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unused")
@@ -50,7 +51,21 @@ public final class GravityDirectionUtil {
             return false;
         }
 
+        Direction previousDirection = getOwnGravityDirection(entity);
+        if (previousDirection == direction) {
+            return false;
+        }
+
+        AABB previousBoundingBox = entity.getBoundingBox();
         attribute.setBaseValue(DirectionalAttribute.valueOf(direction));
+        if (!entity.level().isClientSide() && !(entity instanceof Player)) {
+            Vec3 alignedPosition = RotationUtil.getCenterAlignedPosition(
+                previousBoundingBox,
+                entity.getDimensions(entity.getPose()),
+                direction
+            );
+            entity.teleportTo(alignedPosition.x, alignedPosition.y, alignedPosition.z);
+        }
         return true;
     }
 
@@ -64,7 +79,7 @@ public final class GravityDirectionUtil {
             return false;
         }
 
-        if (previousDirection == Direction.DOWN && direction != Direction.DOWN) {
+        if (entity instanceof Player && previousDirection == Direction.DOWN && direction != Direction.DOWN) {
             entity.teleportTo(entity.getX(), entity.getY() + DOWN_TO_NON_DOWN_LIFT, entity.getZ());
         }
 

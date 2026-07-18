@@ -13,7 +13,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.block.state.BlockState;
@@ -152,7 +151,7 @@ public abstract class EntityMixin {
     private void gravitychanger$checkDirectionalEyeInWall(final CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (Entity)(Object)this;
         Direction gravityDirection = GravityDirectionUtil.getGravityDirection(entity);
-        if (!(entity instanceof Player) || !gravityDirection.getAxis().isHorizontal()) {
+        if (gravityDirection == Direction.DOWN) {
             return;
         }
 
@@ -162,8 +161,7 @@ public abstract class EntityMixin {
         }
 
         float checkWidth = this.dimensions.width() * 0.8F;
-        AABB localEyeBox = AABB.ofSize(Vec3.ZERO, checkWidth, 1.0E-6, checkWidth);
-        AABB eyeBox = RotationUtil.boxPlayerToWorld(localEyeBox, gravityDirection).move(entity.getEyePosition());
+        AABB eyeBox = RotationUtil.makeDirectionalEyeBox(entity.getEyePosition(), checkWidth, gravityDirection);
         boolean inWall = BlockPos.betweenClosedStream(eyeBox).anyMatch(pos -> {
             BlockState state = this.level().getBlockState(pos);
             return !state.isAir()

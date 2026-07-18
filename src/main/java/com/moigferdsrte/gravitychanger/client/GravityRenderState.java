@@ -1,9 +1,9 @@
 package com.moigferdsrte.gravitychanger.client;
 
-import net.minecraft.core.Direction;
+import org.joml.Quaternionf;
 
 public interface GravityRenderState {
-    Direction gravitychanger$getGravityDirection();
+    Quaternionf gravitychanger$getGravityRotation();
 
-    void gravitychanger$setGravityDirection(Direction direction);
+    void gravitychanger$setGravityRotation(Quaternionf rotation);
 }

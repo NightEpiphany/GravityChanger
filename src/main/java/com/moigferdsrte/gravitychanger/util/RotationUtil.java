@@ -33,6 +33,13 @@ public final class RotationUtil {
         return vecWorldToPlayer(vec.x, vec.y, vec.z, gravityDirection);
     }
 
+    public static Vec3 vecWorldToPlayer(final Vec3 vec, final Quaternionf entityRotation) {
+        Vector3f transformed = new Quaternionf(entityRotation)
+            .conjugate()
+            .transform(new Vector3f((float)vec.x, (float)vec.y, (float)vec.z));
+        return new Vec3(transformed.x, transformed.y, transformed.z);
+    }
+
     public static Vec3 vecWorldToPlayer(final double x, final double y, final double z, final Direction gravityDirection) {
         return switch (gravityDirection) {
             case DOWN -> new Vec3(x, y, z);
@@ -46,6 +53,12 @@ public final class RotationUtil {
 
     public static Vec3 vecPlayerToWorld(final Vec3 vec, final Direction gravityDirection) {
         return vecPlayerToWorld(vec.x, vec.y, vec.z, gravityDirection);
+    }
+
+    public static Vec3 vecPlayerToWorld(final Vec3 vec, final Quaternionf entityRotation) {
+        Vector3f transformed = new Quaternionf(entityRotation)
+            .transform(new Vector3f((float)vec.x, (float)vec.y, (float)vec.z));
+        return new Vec3(transformed.x, transformed.y, transformed.z);
     }
 
     public static Vec3 vecPlayerToWorld(final double x, final double y, final double z, final Direction gravityDirection) {
@@ -91,6 +104,20 @@ public final class RotationUtil {
         return boxPlayerToWorld(localBox, gravityDirection).move(pos);
     }
 
+    public static AABB makeDirectionalEyeBox(final Vec3 eyePosition, final float width, final Direction gravityDirection) {
+        AABB localEyeBox = AABB.ofSize(Vec3.ZERO, width, 1.0E-6, width);
+        return boxPlayerToWorld(localEyeBox, gravityDirection).move(eyePosition);
+    }
+
+    public static Vec3 getCenterAlignedPosition(
+        final AABB previousBoundingBox,
+        final EntityDimensions dimensions,
+        final Direction gravityDirection
+    ) {
+        Vec3 relativeCenter = makeBoxFromDimensions(dimensions, gravityDirection, Vec3.ZERO).getCenter();
+        return previousBoundingBox.getCenter().subtract(relativeCenter);
+    }
+
     public static Vec2 rotWorldToPlayer(final float yaw, final float pitch, final Direction gravityDirection) {
         return vecToRot(vecWorldToPlayer(rotToVec(yaw, pitch), gravityDirection));
     }
@@ -126,6 +153,14 @@ public final class RotationUtil {
 
     public static Quaternionf getWorldRotationQuaternion(final Direction gravityDirection) {
         return new Quaternionf(WORLD_ROTATION_QUATERNIONS[gravityDirection.get3DDataValue()]);
+    }
+
+    public static boolean isIdentityRotation(final Quaternionf rotation) {
+        double epsilon = 1.0E-5;
+        return Math.abs(rotation.x()) < epsilon
+            && Math.abs(rotation.y()) < epsilon
+            && Math.abs(rotation.z()) < epsilon
+            && Math.abs(Math.abs(rotation.w()) - 1.0F) < epsilon;
     }
 
     public static Vector3f vecPlayerToWorld(final float x, final float y, final float z, final Direction gravityDirection) {

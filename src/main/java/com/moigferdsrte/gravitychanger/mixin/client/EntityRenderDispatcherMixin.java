@@ -3,12 +3,10 @@ package com.moigferdsrte.gravitychanger.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.moigferdsrte.gravitychanger.client.GravityRenderContext;
 import com.moigferdsrte.gravitychanger.client.GravityRenderState;
-import com.moigferdsrte.gravitychanger.util.RotationUtil;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import net.minecraft.core.Direction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,9 +37,6 @@ public abstract class EntityRenderDispatcherMixin {
             return;
         }
 
-        Direction gravityDirection = ((GravityRenderState)renderState).gravitychanger$getGravityDirection();
-        if (gravityDirection != Direction.DOWN) {
-            poseStack.mulPose(RotationUtil.getEntityRotationQuaternion(gravityDirection));
-        }
+        poseStack.mulPose(((GravityRenderState)renderState).gravitychanger$getGravityRotation());
     }
 }

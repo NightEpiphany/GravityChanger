@@ -1,5 +1,6 @@
 package com.moigferdsrte.gravitychanger.mixin.client;
 
+import com.moigferdsrte.gravitychanger.client.GravityAnimationEntity;
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
 import net.minecraft.client.Camera;
@@ -82,11 +83,8 @@ public abstract class CameraMixin {
         }
 
         Direction gravityDirection = GravityDirectionUtil.getGravityDirection(this.entity);
-        if (gravityDirection == Direction.DOWN) {
-            return;
-        }
-
-        Quaternionf gravityRotation = RotationUtil.getCameraRotationQuaternion(gravityDirection);
+        Quaternionf gravityRotation = ((GravityAnimationEntity)this.entity)
+            .gravitychanger$getVisualGravityRotation(gravityDirection);
         gravityRotation.mul(this.rotation);
         this.rotation.set(gravityRotation);
     }
@@ -98,12 +96,15 @@ public abstract class CameraMixin {
         }
 
         Direction gravityDirection = GravityDirectionUtil.getGravityDirection(this.entity);
-        if (gravityDirection == Direction.DOWN) {
+        Quaternionf gravityRotation = ((GravityAnimationEntity)this.entity)
+            .gravitychanger$getVisualGravityRotation(gravityDirection);
+        if (RotationUtil.isIdentityRotation(gravityRotation)) {
             return;
         }
 
         Vec3 entityPosition = this.entity.getPosition(partialTicks);
         double eyeHeight = Mth.lerp(partialTicks, this.eyeHeightOld, this.eyeHeight);
-        this.setPosition(entityPosition.add(RotationUtil.vecPlayerToWorld(0.0, eyeHeight, 0.0, gravityDirection)));
+        Vec3 eyeOffset = RotationUtil.vecPlayerToWorld(new Vec3(0.0, eyeHeight, 0.0), gravityRotation);
+        this.setPosition(entityPosition.add(eyeOffset));
     }
 }

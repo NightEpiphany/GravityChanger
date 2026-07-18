@@ -9,7 +9,9 @@
 		"ServerGamePacketListenerImplMixin"
 	],
 	"client": [
+		"client.AvatarRendererMixin",
 		"client.CameraMixin",
+		"client.EntityGravityAnimationMixin",
 		"client.EntityRenderDispatcherMixin",
 		"client.EntityRenderStateMixin",
 		"client.EntityRendererMixin",

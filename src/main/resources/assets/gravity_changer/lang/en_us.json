@@ -30,6 +30,14 @@
   "item_group.gravity_changer.name": "Gravity Changer",
   "tooltip.gravity_changer.gravity_intensity_modified": "Current Intensity set to: %s",
   "tooltip.gravity_changer.gravity_intensity_minimal": "Current Intensity: 5. Gravity strength cannot be decreased any further!",
-  "tooltip.gravity_changer.gravity_intensity_maximal": "Current Intensity: 15. Gravity strength cannot be increased any further!"
+  "tooltip.gravity_changer.gravity_intensity_maximal": "Current Intensity: 15. Gravity strength cannot be increased any further!",
+
+  "config.gravity_changer.title": "Gravity Changer Configuration",
+  "config.gravity_changer.category.safety": "Safety",
+  "config.gravity_changer.directional_fall_limit_enabled": "Directional Fall Time Limit",
+  "config.gravity_changer.directional_fall_limit_enabled.tooltip": "Applies void-like damage after a continuous non-downward fall exceeds the configured time.",
+  "config.gravity_changer.directional_fall_limit_seconds": "Maximum Fall Time",
+  "config.gravity_changer.directional_fall_limit_seconds.tooltip": "Maximum continuous fall time before void-like damage begins.",
+  "config.gravity_changer.seconds": "%s seconds"
   
 }

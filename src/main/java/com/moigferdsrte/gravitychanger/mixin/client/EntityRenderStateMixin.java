@@ -2,22 +2,22 @@ package com.moigferdsrte.gravitychanger.mixin.client;
 
 import com.moigferdsrte.gravitychanger.client.GravityRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.core.Direction;
+import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(EntityRenderState.class)
 public abstract class EntityRenderStateMixin implements GravityRenderState {
     @Unique
-    private Direction gravitychanger$gravityDirection = Direction.DOWN;
+    private final Quaternionf gravitychanger$gravityRotation = new Quaternionf();
 
     @Override
-    public Direction gravitychanger$getGravityDirection() {
-        return this.gravitychanger$gravityDirection;
+    public Quaternionf gravitychanger$getGravityRotation() {
+        return this.gravitychanger$gravityRotation;
     }
 
     @Override
-    public void gravitychanger$setGravityDirection(final Direction direction) {
-        this.gravitychanger$gravityDirection = direction;
+    public void gravitychanger$setGravityRotation(final Quaternionf rotation) {
+        this.gravitychanger$gravityRotation.set(rotation);
     }
 }
