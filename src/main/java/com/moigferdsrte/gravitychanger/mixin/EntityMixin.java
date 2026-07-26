@@ -1,5 +1,6 @@
 package com.moigferdsrte.gravitychanger.mixin;
 
+import com.moigferdsrte.gravitychanger.api.GravityMovementEntity;
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
 import it.unimi.dsi.fastutil.floats.FloatArraySet;
@@ -24,14 +25,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.jspecify.annotations.Nullable;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin {
+public abstract class EntityMixin implements GravityMovementEntity {
     @Unique
     private static final double GRAVITYCHANGER_COLLISION_EPSILON = 1.0E-7;
 
@@ -43,6 +45,39 @@ public abstract class EntityMixin {
 
     @Unique
     private Vec3 gravitychanger$lastMoveMovement = Vec3.ZERO;
+
+    @Unique
+    private @Nullable BlockPos gravitychanger$lastGravityCore;
+
+    @Unique
+    private int gravitychanger$lastGravityCoreTick = Integer.MIN_VALUE;
+
+    @Override
+    public Vec3 gravitychanger$getLastMoveDelta() {
+        return this.gravitychanger$lastMoveDelta;
+    }
+
+    @Override
+    public void gravitychanger$rememberGravityCore(final BlockPos pos, final int tick) {
+        this.gravitychanger$lastGravityCore = pos;
+        this.gravitychanger$lastGravityCoreTick = tick;
+    }
+
+    @Override
+    public @Nullable BlockPos gravitychanger$getLastGravityCore() {
+        return this.gravitychanger$lastGravityCore;
+    }
+
+    @Override
+    public int gravitychanger$getLastGravityCoreTick() {
+        return this.gravitychanger$lastGravityCoreTick;
+    }
+
+    @Override
+    public void gravitychanger$clearGravityCore() {
+        this.gravitychanger$lastGravityCore = null;
+        this.gravitychanger$lastGravityCoreTick = Integer.MIN_VALUE;
+    }
 
     @Shadow
     private EntityDimensions dimensions;

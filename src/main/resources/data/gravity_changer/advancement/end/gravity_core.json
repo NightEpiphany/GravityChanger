@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:end/dragon_egg",
+  "criteria": {
+    "gravity_core": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gravity_changer:gravity_core"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.end.gravity_core.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "gravity_changer:gravity_core"
+    },
+    "title": {
+      "translate": "advancements.end.gravity_core.title"
+    }
+  },
+  "requirements": [
+    [
+      "gravity_core"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

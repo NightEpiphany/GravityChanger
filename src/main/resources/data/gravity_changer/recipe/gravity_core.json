@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": "minecraft:nether_star",
+    "X": "minecraft:netherite_ingot",
+    "M": "minecraft:shulker_shell",
+    "O": "minecraft:dragon_egg"
+  },
+  "pattern": [
+    "XMX",
+    "#O#",
+    "XMX"
+  ],
+  "result": {
+    "id": "gravity_changer:gravity_core"
+  }
+}

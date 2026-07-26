@@ -1,10 +1,7 @@
 package com.moigferdsrte.gravitychanger;
 
 import com.moigferdsrte.gravitychanger.config.GravityChangerConfigManager;
-import com.moigferdsrte.gravitychanger.init.ModAttributes;
-import com.moigferdsrte.gravitychanger.init.ModCreativeTabs;
-import com.moigferdsrte.gravitychanger.init.ModEvents;
-import com.moigferdsrte.gravitychanger.init.ModItems;
+import com.moigferdsrte.gravitychanger.init.*;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
@@ -19,8 +16,9 @@ public final class GravityChanger implements ModInitializer {
 	public void onInitialize() {
 		GravityChangerConfigManager.initialize();
 		ModAttributes.init();
-		ModItems.init();
 		ModEvents.init();
+		ModBlocks.init();
+		ModItems.init();
 		ModCreativeTabs.init();
 	}
 

@@ -38,6 +38,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.GRAVITY_ANCHOR_WEST);
                     output.accept(ModItems.GRAVITY_ANCHOR_UP);
                     output.accept(ModItems.GRAVITY_ANCHOR_DOWN);
+                    output.accept(ModItems.GRAVITY_CORE);
                 }).build());
     }
 }

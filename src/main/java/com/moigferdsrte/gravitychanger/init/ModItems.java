@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,8 @@ public final class ModItems {
     public static final Item GRAVITY_INCREASER_AOE = registerItem("gravity_increaser_aoe", p -> new GravityModificationAOEItem(ModifiableGravityItem.Modify.INCREASE, p), new Item.Properties());
 
     public static final Item GRAVITY_DECREASER_AOE = registerItem("gravity_decreaser_aoe", p -> new GravityModificationAOEItem(ModifiableGravityItem.Modify.DECREASE, p), new Item.Properties());
+
+    public static final Item GRAVITY_CORE = registerItem("gravity_core", GravityCoreBlockItem::new, new Item.Properties().rarity(Rarity.RARE).stacksTo(1));
     private static Item registerItem(final String id, final Function<Item.Properties, Item> itemFactory, final Item.Properties properties) {
         Item item = itemFactory.apply(properties.setId(ResourceKey.create(Registries.ITEM, GravityChanger.id(id))));
 

@@ -2,6 +2,7 @@ package com.moigferdsrte.gravitychanger.mixin;
 
 import com.moigferdsrte.gravitychanger.config.GravityChangerConfig;
 import com.moigferdsrte.gravitychanger.config.GravityChangerConfigManager;
+import com.moigferdsrte.gravitychanger.block.GravityCoreTransitionHandler;
 import com.moigferdsrte.gravitychanger.init.ModAttributes;
 import com.moigferdsrte.gravitychanger.util.DirectionalFallTracker;
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
@@ -89,6 +90,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "tick", at = @At("TAIL"))
     private void gravitychanger$limitDirectionalFallTime(final CallbackInfo ci) {
         LivingEntity entity = (LivingEntity)(Object)this;
+        GravityCoreTransitionHandler.tryTransitionOnFall(entity.level(), entity);
         GravityChangerConfig config = GravityChangerConfigManager.get();
         Direction gravityDirection = GravityDirectionUtil.getGravityDirection(entity);
         boolean creativePlayer = entity instanceof Player player && player.isCreative();

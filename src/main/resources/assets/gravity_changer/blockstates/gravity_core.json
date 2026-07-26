@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "enabled=true": {
+      "model": "gravity_changer:block/gravity_core"
+    },
+    "enabled=false": {
+      "model": "gravity_changer:block/gravity_core_disabled"
+    }
+  }
+}

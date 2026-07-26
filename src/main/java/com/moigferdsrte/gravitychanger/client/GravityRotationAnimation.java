@@ -17,7 +17,7 @@ public final class GravityRotationAnimation {
         return this.getRotation(gravityDirection, System.nanoTime());
     }
 
-    synchronized Quaternionf getRotation(final Direction gravityDirection, final long nowNanos) {
+    public synchronized Quaternionf getRotation(final Direction gravityDirection, final long nowNanos) {
         if (!this.initialized) {
             Quaternionf initialRotation = RotationUtil.getEntityRotationQuaternion(gravityDirection);
             this.startRotation.set(initialRotation);
@@ -36,6 +36,22 @@ public final class GravityRotationAnimation {
         }
 
         return this.interpolate(nowNanos);
+    }
+
+    public synchronized void forceSet(final Direction gravityDirection, final long nowNanos) {
+        this.forceSet(RotationUtil.getEntityRotationQuaternion(gravityDirection), gravityDirection, nowNanos);
+    }
+
+    public synchronized void forceSet(
+        final Quaternionf rotation,
+        final Direction gravityDirection,
+        final long nowNanos
+    ) {
+        this.startRotation.set(rotation);
+        this.targetRotation.set(rotation);
+        this.targetDirection = gravityDirection;
+        this.startTimeNanos = nowNanos;
+        this.initialized = true;
     }
 
     private Quaternionf interpolate(final long nowNanos) {

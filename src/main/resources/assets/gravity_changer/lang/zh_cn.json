@@ -21,6 +21,7 @@
   "item.gravity_changer.gravity_increaser_aoe": "范围性重力增幅器",
   "item.gravity_changer.gravity_decreaser": "重力缩放器",
   "item.gravity_changer.gravity_decreaser_aoe": "范围性重力缩放器",
+  "item.gravity_changer.gravity_core": "重力核心",
   "attribute.name.gravity_changer.gravity_direction": "重力方向",
   "attribute.name.gravity_changer.gravity_strength": "重力强度",
   "item_group.gravity_changer.name": "重力变换",
@@ -33,5 +34,14 @@
   "config.gravity_changer.directional_fall_limit_enabled.tooltip": "非下方重力的连续坠落超过设定时间后，实体将受到类似虚空的持续伤害。",
   "config.gravity_changer.directional_fall_limit_seconds": "最大坠落时间",
   "config.gravity_changer.directional_fall_limit_seconds.tooltip": "开始受到持续虚空伤害前允许的最长连续坠落时间。",
-  "config.gravity_changer.seconds": "%s 秒"
+  "config.gravity_changer.seconds": "%s 秒",
+  "tooltip.gravity_changer.shift": "按下Shift键获取详细介绍信息...",
+  "tooltip.gravity_changer.gravity_changer": "转换你的重力方向。仅创造模式可用。",
+  "tooltip.gravity_changer.gravity_changer_aoe": "转换附近生物的重力方向。仅创造模式可用。",
+  "tooltip.gravity_changer.gravity_modification": "修改你的重力强度。仅创造模式可用。",
+  "tooltip.gravity_changer.gravity_modification_aoe": "修改附近生物的重力强度。仅创造模式可用。",
+  "tooltip.gravity_changer.gravity_anchor": "手持即可改变重力方向。仅创造模式可用。",
+  "tooltip.gravity_changer.gravity_core": "踩在该方块上的实体可以在不同方块面上实现同步重力切换。",
+  "advancements.end.gravity_core.title": "21世纪最伟大的发明",
+  "advancements.end.gravity_core.description": "获得重力核心"
 }

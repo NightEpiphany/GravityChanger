@@ -8,6 +8,5 @@ import net.fabricmc.api.Environment;
 public final class GravityChangerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-
     }
 }

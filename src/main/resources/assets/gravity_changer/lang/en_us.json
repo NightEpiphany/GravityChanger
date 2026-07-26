@@ -5,39 +5,43 @@
   "item.gravity_changer.gravity_changer_south": "South Gravity Changer",
   "item.gravity_changer.gravity_changer_west": "West Gravity Changer",
   "item.gravity_changer.gravity_changer_east": "East Gravity Changer",
-
   "item.gravity_changer.gravity_changer_down_aoe": "Down Gravity Changer AOE",
   "item.gravity_changer.gravity_changer_up_aoe": "Up Gravity Changer AOE",
   "item.gravity_changer.gravity_changer_north_aoe": "North Gravity Changer AOE",
   "item.gravity_changer.gravity_changer_south_aoe": "South Gravity Changer AOE",
   "item.gravity_changer.gravity_changer_west_aoe": "West Gravity Changer AOE",
   "item.gravity_changer.gravity_changer_east_aoe": "East Gravity Changer AOE",
-
   "item.gravity_changer.gravity_anchor_down": "Down Gravity Anchor",
   "item.gravity_changer.gravity_anchor_up": "Up Gravity Anchor",
   "item.gravity_changer.gravity_anchor_north": "North Gravity Anchor",
   "item.gravity_changer.gravity_anchor_south": "South Gravity Anchor",
   "item.gravity_changer.gravity_anchor_west": "West Gravity Anchor",
   "item.gravity_changer.gravity_anchor_east": "East Gravity Anchor",
-  
   "item.gravity_changer.gravity_increaser": "Gravity Increser",
   "item.gravity_changer.gravity_increaser_aoe": "Gravity Increser AOE",
   "item.gravity_changer.gravity_decreaser": "Gravity Decreser",
   "item.gravity_changer.gravity_decreaser_aoe": "Gravity Decreser AOE",
-
+  "item.gravity_changer.gravity_core": "Gravity Core",
   "attribute.name.gravity_changer.gravity_direction": "Gravity Direction",
   "attribute.name.gravity_changer.gravity_strength": "Gravity Strength",
   "item_group.gravity_changer.name": "Gravity Changer",
   "tooltip.gravity_changer.gravity_intensity_modified": "Current Intensity set to: %s",
   "tooltip.gravity_changer.gravity_intensity_minimal": "Current Intensity: 5. Gravity strength cannot be decreased any further!",
   "tooltip.gravity_changer.gravity_intensity_maximal": "Current Intensity: 15. Gravity strength cannot be increased any further!",
-
   "config.gravity_changer.title": "Gravity Changer Configuration",
   "config.gravity_changer.category.safety": "Safety",
   "config.gravity_changer.directional_fall_limit_enabled": "Directional Fall Time Limit",
   "config.gravity_changer.directional_fall_limit_enabled.tooltip": "Applies void-like damage after a continuous non-downward fall exceeds the configured time.",
   "config.gravity_changer.directional_fall_limit_seconds": "Maximum Fall Time",
   "config.gravity_changer.directional_fall_limit_seconds.tooltip": "Maximum continuous fall time before void-like damage begins.",
-  "config.gravity_changer.seconds": "%s seconds"
-  
+  "config.gravity_changer.seconds": "%s seconds",
+  "tooltip.gravity_changer.shift": "Shift for intro...",
+  "tooltip.gravity_changer.gravity_changer": "Transform your gravity direction. Creative only.",
+  "tooltip.gravity_changer.gravity_changer_aoe": "Transform nearby mobs' gravity direction. Creative only.",
+  "tooltip.gravity_changer.gravity_modification": "Modify your gravity strength. Creative only.",
+  "tooltip.gravity_changer.gravity_modification_aoe": "Modify nearby mobs' gravity strength. Creative only.",
+  "tooltip.gravity_changer.gravity_anchor": "Change gravity direction when holding. Creative only.",
+  "tooltip.gravity_changer.gravity_core": "Cross-facing sync with stepping entity's gravity direction.",
+  "advancements.end.gravity_core.title": "The Greatest Invention in 21th Century",
+  "advancements.end.gravity_core.description": "Obtain gravity core block."
 }

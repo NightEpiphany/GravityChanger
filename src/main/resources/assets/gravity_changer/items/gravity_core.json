@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "gravity_changer:block/gravity_core"
+  }
+}

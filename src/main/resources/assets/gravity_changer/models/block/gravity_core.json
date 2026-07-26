@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "gravity_changer:block/gravity_core_end",
+    "side": "gravity_changer:block/gravity_core_side"
+  }
+}
