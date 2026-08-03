@@ -1,0 +1,12 @@
+{
+	"plugin": "com.moigferdsrte.gravitychanger.mixin.plugin.GravityChangerMixinPlugin",
+	"required": false,
+	"package": "com.moigferdsrte.gravitychanger.compat.bedrockify.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"BedrockifyClientMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -22,6 +22,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -356,16 +358,20 @@ public abstract class EntityMixin implements GravityMovementEntity {
         moveFunction.accept(passenger, position.x, position.y, position.z);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "move",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Entity;collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;"
         )
     )
-    private Vec3 gravitychanger$captureMoveDeltaBeforeCollision(final Entity entity, final Vec3 movement) {
+    private Vec3 gravitychanger$captureMoveDeltaBeforeCollision(
+        final Entity entity,
+        final Vec3 movement,
+        final Operation<Vec3> operation
+    ) {
         this.gravitychanger$lastMoveDelta = movement;
-        this.gravitychanger$lastMoveMovement = this.collide(movement);
+        this.gravitychanger$lastMoveMovement = operation.call(entity, movement);
         return this.gravitychanger$lastMoveMovement;
     }
 

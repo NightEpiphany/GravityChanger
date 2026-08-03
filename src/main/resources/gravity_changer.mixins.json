@@ -1,4 +1,5 @@
 {
+	"plugin": "com.moigferdsrte.gravitychanger.mixin.plugin.GravityChangerMixinPlugin",
 	"required": true,
 	"package": "com.moigferdsrte.gravitychanger.mixin",
 	"compatibilityLevel": "JAVA_25",
@@ -6,6 +7,7 @@
 		"EntityMixin",
 		"LivingEntityMixin",
 		"PlayerMixin",
+		"PlayerDirectionalCollisionMixin",
 		"ServerGamePacketListenerImplMixin"
 	],
 	"client": [

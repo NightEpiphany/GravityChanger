@@ -4,11 +4,9 @@ import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -59,21 +57,6 @@ public abstract class PlayerMixin {
 
         Vec3 localMovement = RotationUtil.vecWorldToPlayer(movement, gravityDirection);
         return RotationUtil.vecPlayerToWorld(localMovement.x, this.gravitychanger$localVerticalVelocity * 0.6, localMovement.z, gravityDirection);
-    }
-
-    @Redirect(
-        method = "canPlayerFitWithinBlocksAndEntitiesWhen",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/EntityDimensions;makeBoundingBox(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/AABB;"
-        )
-    )
-    private AABB gravitychanger$makeDirectionalPoseBoundingBox(final EntityDimensions dimensions, final Vec3 pos) {
-        Player player = (Player)(Object)this;
-        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(player);
-        return gravityDirection == Direction.DOWN
-            ? dimensions.makeBoundingBox(pos)
-            : RotationUtil.makeBoxFromDimensions(dimensions, gravityDirection, pos);
     }
 
     @Inject(

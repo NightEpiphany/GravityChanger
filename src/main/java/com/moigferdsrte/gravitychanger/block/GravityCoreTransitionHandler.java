@@ -124,6 +124,7 @@ public final class GravityCoreTransitionHandler {
 
     static void tryTransition(final Level level, final BlockPos corePos, final LivingEntity entity) {
         if (!(level instanceof ServerLevel serverLevel)
+            || !(entity instanceof GravityMovementEntity)
             || !entity.isAlive()
             || entity.isPassenger()
             || entity.isNoGravity()

@@ -10,6 +10,9 @@ group = providers.gradleProperty("maven_group").get()
 
 repositories {
 	maven {
+		url = URI("https://cursemaven.com")
+	}
+	maven {
 		name = "Modrinth"
 		url = URI("https://api.modrinth.com/maven")
 	}
@@ -23,6 +26,9 @@ dependencies {
 	implementation("maven.modrinth:cloth-config:${providers.gradleProperty("cloth_config_version").get()}")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
+	implementation("maven.modrinth:AANobbMI:2Yom1N68")
+	implementation("maven.modrinth:ox3rDp1B:4pyW4Uba")
+	implementation("curse.maven:immersive-portal-1511174:8567311")
 	testImplementation(platform("org.junit:junit-bom:5.13.4"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
