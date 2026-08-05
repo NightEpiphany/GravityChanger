@@ -1,5 +1,5 @@
 ## About
-This fabric mod ports the [Gravity Changer (qouteall fork)](https://modrinth.com/mod/gravity-api-fork) based on [Gravity API](https://modrinth.com/mod/gravity-api) to higher **1.21** versions.
+This fabric mod ports the [Gravity Changer (qouteall fork)](https://modrinth.com/mod/gravity-api-fork) based on [Gravity API](https://modrinth.com/mod/gravity-api) to higher **1.21,26.2** versions.
 
 ## Additions
 Currently on **beta**.  
@@ -8,10 +8,32 @@ Some of the testing items are not in the creative tab
 - Gravity Changer (Stable)
 - Gravity related Commands (Stable)
 - Gravity Anchor (Stable)
-- Gravity Plate (Unstable)
-- Gravity Status Effect & Potions (Stable)
+- Gravity Core Block (Stable/26.2)
+- ~~Gravity Plate (Unstable)~~ (Marked for removal)
+- ~~Gravity Status Effect & Potions (Stable)~~ (Marked for removal)
 
-## Commands
+## Commands (26.2)
+``
+/attribute @p gravity_changer:gravity_direction base set <directionValue>
+``
+Sets the base gravity direction.
+- directionValue ref:
+> 0 -> DOWN  
+> 1 -> UP  
+> 2 -> NORTH  
+> 3 -> SOUTH  
+> 4 -> WEST  
+> 5 -> EAST  
+
+``
+/attribute @p gravity_changer:gravity_strength base set <value>
+``
+
+Sets the base gravity strength. Default value: **9.8**. Range: **5 to 15**.
+
+Check the vanilla [``attribute`` command](https://minecraft.wiki/w/Commands/attribute) format for more info.
+
+## Commands (1.21)
 
 ``
 /gravity set_base_direction <direction> [entities]

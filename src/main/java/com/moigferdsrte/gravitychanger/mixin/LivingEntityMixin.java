@@ -1,10 +1,14 @@
 package com.moigferdsrte.gravitychanger.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.moigferdsrte.gravitychanger.config.GravityChangerConfig;
 import com.moigferdsrte.gravitychanger.config.GravityChangerConfigManager;
 import com.moigferdsrte.gravitychanger.block.GravityCoreTransitionHandler;
 import com.moigferdsrte.gravitychanger.init.ModAttributes;
 import com.moigferdsrte.gravitychanger.util.DirectionalFallTracker;
+import com.moigferdsrte.gravitychanger.util.ElytraFlightUtil;
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
 import net.minecraft.core.BlockPos;
@@ -100,6 +104,7 @@ public abstract class LivingEntityMixin extends Entity {
             && !creativePlayer
             && !entity.onGround()
             && !entity.isPassenger()
+            && !entity.isFallFlying()
             && !entity.isNoGravity()
             && RotationUtil.vecWorldToPlayer(entity.getDeltaMovement(), gravityDirection).y < -GRAVITYCHANGER_MINIMUM_FALL_SPEED;
         int maximumTicks = config.directionalFallLimitSeconds() * 20;
@@ -180,6 +185,49 @@ public abstract class LivingEntityMixin extends Entity {
         }
 
         entity.setDeltaMovement(RotationUtil.vecPlayerToWorld(nextLocalMovement, gravityDirection));
+    }
+
+    @WrapMethod(method = "updateFallFlyingMovement")
+    private Vec3 gravitychanger$updateDirectionalFallFlyingMovement(
+        final Vec3 movement,
+        final Operation<Vec3> operation
+    ) {
+        LivingEntity entity = (LivingEntity)(Object)this;
+        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(entity);
+        if (gravityDirection == Direction.DOWN) {
+            return operation.call(movement);
+        }
+
+        Vec3 localMovement = RotationUtil.vecWorldToPlayer(movement, gravityDirection);
+        double effectiveGravity = GravityDirectionUtil.getEffectiveGravity(
+            entity.getGravity(),
+            localMovement.y,
+            entity.hasEffect(MobEffects.SLOW_FALLING)
+        );
+        return ElytraFlightUtil.updateMovement(
+            movement,
+            entity.getLookAngle(),
+            entity.getXRot() * (float)(Math.PI / 180.0),
+            GravityDirectionUtil.scaleGravity(entity, effectiveGravity),
+            gravityDirection
+        );
+    }
+
+    @WrapOperation(
+        method = "travelFallFlying",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/phys/Vec3;horizontalDistance()D"
+        )
+    )
+    private double gravitychanger$getDirectionalFallFlyingHorizontalSpeed(
+        final Vec3 movement,
+        final Operation<Double> operation
+    ) {
+        Direction gravityDirection = GravityDirectionUtil.getGravityDirection(this);
+        return gravityDirection == Direction.DOWN
+            ? operation.call(movement)
+            : ElytraFlightUtil.horizontalDistance(movement, gravityDirection);
     }
 
     @Inject(method = "calculateEntityAnimation", at = @At("HEAD"), cancellable = true)
