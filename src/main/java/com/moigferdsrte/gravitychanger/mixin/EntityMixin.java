@@ -14,6 +14,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.block.state.BlockState;
@@ -415,11 +418,18 @@ public abstract class EntityMixin implements GravityMovementEntity {
     )
     private Vec3 gravitychanger$applyDirectionalGravity(final Vec3 movement, final double x, final double y, final double z) {
         Entity entity = (Entity)(Object)this;
-        if (GravityDirectionUtil.getGravityDirection(entity) == Direction.DOWN) {
-            return movement.add(x, GravityDirectionUtil.scaleGravity(entity, y), z);
+        Entity gravitySource = entity;
+        if (entity instanceof Projectile projectile
+            && projectile.getOwner() instanceof Mob owner
+            && owner instanceof RangedAttackMob) {
+            gravitySource = owner;
         }
 
-        return movement.add(GravityDirectionUtil.getGravityVector(entity, Math.abs(y)));
+        if (GravityDirectionUtil.getGravityDirection(gravitySource) == Direction.DOWN) {
+            return movement.add(x, GravityDirectionUtil.scaleGravity(gravitySource, y), z);
+        }
+
+        return movement.add(GravityDirectionUtil.getGravityVector(gravitySource, Math.abs(y)));
     }
 
     @Redirect(

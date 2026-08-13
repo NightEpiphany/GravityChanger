@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.moigferdsrte.gravitychanger.config.GravityChangerConfig;
 import com.moigferdsrte.gravitychanger.config.GravityChangerConfigManager;
 import com.moigferdsrte.gravitychanger.block.GravityCoreTransitionHandler;
+import com.moigferdsrte.gravitychanger.entity.DirectionalKnockbackUtil;
 import com.moigferdsrte.gravitychanger.init.ModAttributes;
 import com.moigferdsrte.gravitychanger.util.DirectionalFallTracker;
 import com.moigferdsrte.gravitychanger.util.ElytraFlightUtil;
@@ -23,9 +24,12 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -84,6 +88,54 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected abstract void updateWalkAnimation(final float distance);
 
+    @WrapMethod(method = "knockback(DDDLnet/minecraft/world/damagesource/DamageSource;FZ)V")
+    private void gravitychanger$applyDirectionalPlayerKnockback(
+        final double strength,
+        final double x,
+        final double z,
+        final DamageSource damageSource,
+        final float damage,
+        final boolean comesFromEffect,
+        final Operation<Void> original
+    ) {
+        LivingEntity target = (LivingEntity)(Object)this;
+        Entity attacker = damageSource.getEntity();
+        if (!(attacker instanceof Player)
+            || damageSource.getDirectEntity() != attacker
+            || (GravityDirectionUtil.getGravityDirection(attacker) == Direction.DOWN
+                && GravityDirectionUtil.getGravityDirection(target) == Direction.DOWN)) {
+            original.call(strength, x, z, damageSource, damage, comesFromEffect);
+            return;
+        }
+
+        double effectiveStrength = strength * (1.0 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+        if (effectiveStrength <= 0.0) {
+            return;
+        }
+
+        Direction targetGravity = GravityDirectionUtil.getGravityDirection(target);
+        Vec3 direction = DirectionalKnockbackUtil.getDirectionTowardAttacker(
+            target.getBoundingBox().getCenter(),
+            attacker.getBoundingBox().getCenter(),
+            targetGravity
+        );
+        if (direction.lengthSqr() < 1.0E-5) {
+            Vec3 vanillaDirection = new Vec3(x, 0.0, z);
+            direction = targetGravity == Direction.DOWN
+                ? vanillaDirection
+                : RotationUtil.vecPlayerToWorld(vanillaDirection, targetGravity);
+        }
+
+        this.needsSync = true;
+        target.setDeltaMovement(DirectionalKnockbackUtil.applyKnockback(
+            target.getDeltaMovement(),
+            direction,
+            effectiveStrength,
+            target.onGround(),
+            targetGravity
+        ));
+    }
+
     @Inject(method = "createLivingAttributes", at = @At("RETURN"))
     private static void gravitychanger$addGravityDirectionAttribute(final CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
         cir.getReturnValue()
@@ -113,6 +165,42 @@ public abstract class LivingEntityMixin extends Entity {
             && entity.level() instanceof ServerLevel serverLevel) {
             entity.hurtServer(serverLevel, entity.damageSources().fellOutOfWorld(), GRAVITYCHANGER_VOID_DAMAGE);
         }
+    }
+
+    @Inject(
+        method = "hasLineOfSight(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;D)Z",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private void gravitychanger$checkDirectionalLineOfSight(
+        final Entity target,
+        final ClipContext.Block blockMode,
+        final ClipContext.Fluid fluidMode,
+        final double targetEyeY,
+        final CallbackInfoReturnable<Boolean> cir
+    ) {
+        LivingEntity observer = (LivingEntity)(Object)this;
+        if (GravityDirectionUtil.getGravityDirection(observer) == Direction.DOWN
+            && GravityDirectionUtil.getGravityDirection(target) == Direction.DOWN) {
+            return;
+        }
+
+        if (target.level() != observer.level()) {
+            cir.setReturnValue(false);
+            return;
+        }
+
+        Vec3 from = observer.getEyePosition();
+        Vec3 to = target.getEyePosition();
+        if (to.distanceTo(from) > 128.0) {
+            cir.setReturnValue(false);
+            return;
+        }
+
+        HitResult.Type result = observer.level().clip(
+            new ClipContext(from, to, blockMode, fluidMode, observer)
+        ).getType();
+        cir.setReturnValue(result == HitResult.Type.MISS);
     }
 
     @Inject(method = "jumpFromGround", at = @At("HEAD"), cancellable = true)

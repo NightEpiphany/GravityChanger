@@ -28,7 +28,7 @@ dependencies {
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
 	implementation("maven.modrinth:AANobbMI:2Yom1N68")
 	implementation("maven.modrinth:ox3rDp1B:4pyW4Uba")
-	implementation("curse.maven:immersive-portal-1511174:8567311")
+	compileOnly("curse.maven:immersive-portal-1511174:8567311")
 	testImplementation(platform("org.junit:junit-bom:5.13.4"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -7,8 +7,12 @@
 		"EntityMixin",
 		"FireworkRocketEntityMixin",
 		"LivingEntityMixin",
+		"LookControlMixin",
+		"MobMixin",
+		"MoveControlMixin",
 		"PlayerMixin",
 		"PlayerDirectionalCollisionMixin",
+		"ProjectileMixin",
 		"ServerGamePacketListenerImplMixin"
 	],
 	"client": [
