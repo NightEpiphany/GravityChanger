@@ -5,6 +5,10 @@ plugins {
 	`maven-publish`
 }
 
+base {
+	archivesName = providers.gradleProperty("archives_base_name")
+}
+
 version = providers.gradleProperty("mod_version").get()
 group = providers.gradleProperty("maven_group").get()
 
