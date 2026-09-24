@@ -14,6 +14,7 @@
   "item.gravity_changer.gravity_anchor_down": "Якорь Гравитации Вниз",
   "item.gravity_changer.gravity_anchor_up": "Якорь Гравитации Вверх",
   "item.gravity_changer.gravity_anchor_north": "Якорь Гравитации На Север",
+  "item.gravity_changer.gravity_anchor_south": "Якорь Гравитации На Юг",
   "item.gravity_changer.gravity_anchor_west": "Якорь Гравитации На Запад",
   "item.gravity_changer.gravity_anchor_east": "Якорь Гравитации На Восток",
   "item.gravity_changer.gravity_increaser": "Усилитель Гравитации",
