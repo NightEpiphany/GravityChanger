@@ -14,4 +14,4 @@ pluginManagement {
 }
 
 // Should match your modid
-rootProject.name = "gravity_changer"
+rootProject.name = "GC-26.2-fabric"
