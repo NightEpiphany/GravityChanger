@@ -1,5 +1,5 @@
 ## About
-This fabric mod ports the [Gravity Changer (qouteall fork)](https://modrinth.com/mod/gravity-api-fork) based on [Gravity API](https://modrinth.com/mod/gravity-api) to higher **1.21,26.2** versions.
+This fabric mod ports the [Gravity Changer (qouteall fork)](https://modrinth.com/mod/gravity-api-fork) based on [Gravity API](https://modrinth.com/mod/gravity-api) to higher **1.21, 26.2, 26.3** versions.
 
 ## Additions
 Currently on **beta**.  
@@ -8,11 +8,11 @@ Some of the testing items are not in the creative tab
 - Gravity Changer (Stable)
 - Gravity related Commands (Stable)
 - Gravity Anchor (Stable)
-- Gravity Core Block (Stable/26.2)
+- Gravity Core Block (Stable/26.2+)
 - ~~Gravity Plate (Unstable)~~ (Marked for removal)
 - ~~Gravity Status Effect & Potions (Stable)~~ (Marked for removal)
 
-## Commands (26.2)
+## Commands (26.2+)
 ``
 /attribute @p gravity_changer:gravity_direction base set <directionValue>
 ``
