@@ -58,7 +58,7 @@ public abstract class EntityRendererMixin {
 
         poseStack.pushPose();
         try {
-            poseStack.mulPose(new Quaternionf(gravityRotation).conjugate());
+            poseStack.rotate(new Quaternionf(gravityRotation).conjugate());
             operation.call(submitNodeCollector, poseStack, leashState);
         } finally {
             poseStack.popPose();

@@ -5,10 +5,19 @@ plugins {
 	`maven-publish`
 }
 
+base {
+	archivesName = providers.gradleProperty("archives_base_name")
+}
+
 version = providers.gradleProperty("mod_version").get()
 group = providers.gradleProperty("maven_group").get()
 
 repositories {
+	maven {
+		// location of the maven that hosts JEI files since January 2023
+		name = "Jared's maven"
+		url = URI("https://maven.blamejared.com/")
+	}
 	maven {
 		url = URI("https://cursemaven.com")
 	}
@@ -26,9 +35,9 @@ dependencies {
 	implementation("maven.modrinth:cloth-config:${providers.gradleProperty("cloth_config_version").get()}")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
-	implementation("maven.modrinth:AANobbMI:2Yom1N68")
-	implementation("maven.modrinth:ox3rDp1B:4pyW4Uba")
-	compileOnly("curse.maven:immersive-portal-1511174:8567311")
+	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
+	implementation("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
+	implementation("curse.maven:immersive-portal-1511174:8937391")
 	testImplementation(platform("org.junit:junit-bom:5.13.4"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -2,27 +2,31 @@ package com.moigferdsrte.gravitychanger.mixin.client;
 
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
-import net.minecraft.client.renderer.ScreenEffectRenderer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.extract.LevelExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ScreenEffectRenderer.class)
-public abstract class ScreenEffectRendererMixin {
+@Mixin(LevelExtractor.class)
+public abstract class LevelExtractorMixin {
     @Inject(
-        method = "getViewBlockingState(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/level/block/state/BlockState;",
+        method = "getViewBlockingState(Lnet/minecraft/client/player/LocalPlayer;Lnet/minecraft/client/renderer/culling/Frustum;)Lnet/minecraft/world/level/block/state/BlockState;",
         at = @At("HEAD"),
         cancellable = true
     )
     private static void gravitychanger$getDirectionalViewBlockingState(
-        final Player player,
+        final LocalPlayer player,
+        final Frustum frustum,
         final CallbackInfoReturnable<BlockState> cir
     ) {
         Direction gravityDirection = GravityDirectionUtil.getGravityDirection(player);
@@ -36,6 +40,9 @@ public abstract class ScreenEffectRendererMixin {
         }
 
         Vec3 eyePosition = player.getEyePosition();
+        // The frustum bounds already include the camera's gravity rotation.
+        AABB nearPlaneBounds = frustum.getNearPlaneBounds().move(eyePosition);
+        Level level = player.level();
         double horizontalRadius = player.getBbWidth() * 0.8F;
         double verticalRadius = 0.1F * player.getScale();
         BlockPos.MutableBlockPos testPos = new BlockPos.MutableBlockPos();
@@ -47,8 +54,8 @@ public abstract class ScreenEffectRendererMixin {
             Vec3 samplePosition = eyePosition.add(RotationUtil.vecPlayerToWorld(localX, localY, localZ, gravityDirection));
             testPos.set(samplePosition.x, samplePosition.y, samplePosition.z);
 
-            BlockState blockState = player.level().getBlockState(testPos);
-            if (blockState.getRenderShape() != RenderShape.INVISIBLE && blockState.isViewBlocking(player.level(), testPos)) {
+            BlockState blockState = level.getBlockState(testPos);
+            if (blockState.getRenderShape() != RenderShape.INVISIBLE && blockState.isViewBlocking(level, testPos, nearPlaneBounds)) {
                 cir.setReturnValue(blockState);
                 return;
             }

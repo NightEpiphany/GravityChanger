@@ -37,6 +37,6 @@ public abstract class EntityRenderDispatcherMixin {
             return;
         }
 
-        poseStack.mulPose(((GravityRenderState)renderState).gravitychanger$getGravityRotation());
+        poseStack.rotate(((GravityRenderState)renderState).gravitychanger$getGravityRotation());
     }
 }

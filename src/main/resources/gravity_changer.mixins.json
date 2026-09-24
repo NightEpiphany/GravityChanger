@@ -23,8 +23,8 @@
 		"client.EntityRenderStateMixin",
 		"client.EntityRendererMixin",
 		"client.GuiEntityRendererMixin",
-		"client.LocalPlayerMixin",
-		"client.ScreenEffectRendererMixin"
+		"client.LevelExtractorMixin",
+		"client.LocalPlayerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

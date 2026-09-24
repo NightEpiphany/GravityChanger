@@ -1,7 +1,6 @@
 package com.moigferdsrte.gravitychanger.block;
 
 import com.moigferdsrte.gravitychanger.api.GravityMovementEntity;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
@@ -18,18 +17,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.NonNull;
 
 public class GravityCoreBlock extends Block {
-    public static final MapCodec<GravityCoreBlock> CODEC = simpleCodec(GravityCoreBlock::new);
 
     public static final BooleanProperty ENABLE = BooleanProperty.create("enabled");
 
     public GravityCoreBlock(Properties properties) {
         super(properties.mapColor(DyeColor.BLACK).strength(8.5F, 16.0F).requiresCorrectToolForDrops());
         this.registerDefaultState(this.stateDefinition.any().setValue(ENABLE, true));
-    }
-
-    @Override
-    protected @NonNull MapCodec<? extends Block> codec() {
-        return CODEC;
     }
 
     @Override

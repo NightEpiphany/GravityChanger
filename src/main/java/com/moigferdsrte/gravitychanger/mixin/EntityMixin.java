@@ -1,5 +1,6 @@
 package com.moigferdsrte.gravitychanger.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.moigferdsrte.gravitychanger.api.GravityMovementEntity;
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
@@ -146,17 +147,21 @@ public abstract class EntityMixin implements GravityMovementEntity {
         }
     }
 
-    @Inject(method = "calculateViewVector", at = @At("RETURN"), cancellable = true)
-    private void gravitychanger$calculateDirectionalViewVector(
-        final float xRot,
-        final float yRot,
-        final CallbackInfoReturnable<Vec3> cir
-    ) {
+    // calculateViewVector is static in 26.3; rotate only entity-owned results.
+    @ModifyReturnValue(
+        method = {
+            "getViewVector(F)Lnet/minecraft/world/phys/Vec3;",
+            "getUpVector(F)Lnet/minecraft/world/phys/Vec3;",
+            "getLookAngle()Lnet/minecraft/world/phys/Vec3;",
+            "getHeadLookAngle()Lnet/minecraft/world/phys/Vec3;",
+            "getHandHoldingItemAngle(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/phys/Vec3;"
+        },
+        at = @At("RETURN")
+    )
+    private Vec3 gravitychanger$calculateDirectionalViewVector(final Vec3 original) {
         Entity entity = (Entity)(Object)this;
         Direction gravityDirection = GravityDirectionUtil.getGravityDirection(entity);
-        if (gravityDirection != Direction.DOWN) {
-            cir.setReturnValue(RotationUtil.vecPlayerToWorld(cir.getReturnValue(), gravityDirection));
-        }
+        return gravityDirection == Direction.DOWN ? original : RotationUtil.vecPlayerToWorld(original, gravityDirection);
     }
 
     @Inject(method = "getEyePosition()Lnet/minecraft/world/phys/Vec3;", at = @At("HEAD"), cancellable = true)
