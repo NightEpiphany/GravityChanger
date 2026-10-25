@@ -1,0 +1,12 @@
+{
+  "plugin": "com.moigferdsrte.gravitychanger.mixin.plugin.GravityChangerMixinPlugin",
+  "required": false,
+  "package": "com.moigferdsrte.gravitychanger.compat.sable.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "SubLevelEntityCollisionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

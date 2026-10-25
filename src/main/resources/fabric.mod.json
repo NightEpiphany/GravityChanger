@@ -29,7 +29,8 @@
 	"mixins": [
 		"gravity_changer.mixins.json",
 		"gravity_changer.bedrockify.mixins.json",
-		"gravity_changer.seamlessportals.mixins.json"
+		"gravity_changer.seamlessportals.mixins.json",
+		"gravity_changer.sable.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.19.3",

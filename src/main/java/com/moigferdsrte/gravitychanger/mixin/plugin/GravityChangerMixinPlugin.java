@@ -15,6 +15,8 @@ public class GravityChangerMixinPlugin implements IMixinConfigPlugin {
         "com.moigferdsrte.gravitychanger.mixin.PlayerDirectionalCollisionMixin";
     private static final String SEAMLESS_PORTALS_COMPAT_PACKAGE =
         "com.moigferdsrte.gravitychanger.compat.seamlessportals.";
+    private static final String SABLE_COMPAT_PACKAGE =
+        "com.moigferdsrte.gravitychanger.compat.sable.";
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -38,6 +40,10 @@ public class GravityChangerMixinPlugin implements IMixinConfigPlugin {
 
         if (mixinClassName.startsWith(SEAMLESS_PORTALS_COMPAT_PACKAGE)) {
             return FabricLoader.getInstance().isModLoaded("seamlessportals");
+        }
+
+        if (mixinClassName.startsWith(SABLE_COMPAT_PACKAGE)) {
+            return FabricLoader.getInstance().isModLoaded("sable");
         }
 
         return true;

@@ -2,6 +2,7 @@ package com.moigferdsrte.gravitychanger.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.moigferdsrte.gravitychanger.api.GravityMovementEntity;
+import com.moigferdsrte.gravitychanger.compat.sable.SableCollisionSupportEntity;
 import com.moigferdsrte.gravitychanger.util.GravityDirectionUtil;
 import com.moigferdsrte.gravitychanger.util.RotationUtil;
 import it.unimi.dsi.fastutil.floats.FloatArraySet;
@@ -39,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.jspecify.annotations.Nullable;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin implements GravityMovementEntity {
+public abstract class EntityMixin implements GravityMovementEntity, SableCollisionSupportEntity {
     @Unique
     private static final double GRAVITYCHANGER_COLLISION_EPSILON = 1.0E-7;
 
@@ -53,6 +54,9 @@ public abstract class EntityMixin implements GravityMovementEntity {
     private Vec3 gravitychanger$lastMoveMovement = Vec3.ZERO;
 
     @Unique
+    private boolean gravitychanger$sableCollisionSupport;
+
+    @Unique
     private @Nullable BlockPos gravitychanger$lastGravityCore;
 
     @Unique
@@ -61,6 +65,18 @@ public abstract class EntityMixin implements GravityMovementEntity {
     @Override
     public Vec3 gravitychanger$getLastMoveDelta() {
         return this.gravitychanger$lastMoveDelta;
+    }
+
+    @Override
+    public void gravitychanger$setSableCollisionSupport(final boolean supported) {
+        this.gravitychanger$sableCollisionSupport = supported;
+    }
+
+    @Override
+    public boolean gravitychanger$consumeSableCollisionSupport() {
+        boolean supported = this.gravitychanger$sableCollisionSupport;
+        this.gravitychanger$sableCollisionSupport = false;
+        return supported;
     }
 
     @Override
@@ -459,10 +475,13 @@ public abstract class EntityMixin implements GravityMovementEntity {
         Vec3 intendedLocalMovement = RotationUtil.vecWorldToPlayer(this.gravitychanger$lastMoveDelta, gravityDirection);
         Vec3 clippedLocalMovement = RotationUtil.vecWorldToPlayer(movement, gravityDirection);
         boolean localVerticalCollision = !Mth.equal(intendedLocalMovement.y, clippedLocalMovement.y);
-        boolean localGround = localVerticalCollision && intendedLocalMovement.y < 0.0;
+        boolean sableSupport = entity instanceof SableCollisionSupportEntity sableEntity
+            && sableEntity.gravitychanger$consumeSableCollisionSupport()
+            && intendedLocalMovement.y <= 0.0;
+        boolean localGround = localVerticalCollision && intendedLocalMovement.y < 0.0 || sableSupport;
         boolean localHorizontalCollision = !Mth.equal(intendedLocalMovement.x, clippedLocalMovement.x)
             || !Mth.equal(intendedLocalMovement.z, clippedLocalMovement.z);
-        entity.verticalCollision = localVerticalCollision;
+        entity.verticalCollision = localVerticalCollision || sableSupport;
         entity.verticalCollisionBelow = localGround;
         entity.setOnGroundWithMovement(localGround, localHorizontalCollision, movement);
     }
