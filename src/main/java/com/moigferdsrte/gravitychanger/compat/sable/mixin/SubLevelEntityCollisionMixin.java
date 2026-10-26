@@ -88,6 +88,23 @@ public abstract class SubLevelEntityCollisionMixin {
         return original;
     }
 
+    @ModifyExpressionValue(
+        method = "collide",
+        at = @At(
+            value = "INVOKE",
+            target = "Ldev/ryanhcode/sable/sublevel/entity_collision/SubLevelEntityCollision;getHitBoxYaw(Ldev/ryanhcode/sable/companion/math/Pose3dc;)D"
+        ),
+        require = 2,
+        expect = 2
+    )
+    private static double gravitychanger$keepDirectionalBoundsAligned(
+        final double yaw,
+        @Local(argsOnly = true, name = "entity") final Entity entity
+    ) {
+        // World-Y yaw would tilt a horizontal player's long axis away from gravity.
+        return GravityDirectionUtil.getGravityDirection(entity).getAxis() == Direction.Axis.Y ? yaw : 0.0;
+    }
+
     @WrapOperation(
         method = "collide",
         at = {

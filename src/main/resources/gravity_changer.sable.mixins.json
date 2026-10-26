@@ -4,7 +4,11 @@
   "package": "com.moigferdsrte.gravitychanger.compat.sable.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "ActiveSableCompanionMixin",
     "SubLevelEntityCollisionMixin"
+  ],
+  "client": [
+    "EntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

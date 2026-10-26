@@ -38,7 +38,7 @@ dependencies {
 	implementation("maven.modrinth:cloth-config:${providers.gradleProperty("cloth_config_version").get()}")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	// Sable
-    compileOnly(":sable-fabric-26.3:3.0.0")
+    implementation(":sable-fabric-26.3:3.0.0")
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
 	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	implementation("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
