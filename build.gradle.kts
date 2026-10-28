@@ -42,6 +42,8 @@ dependencies {
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
 	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	implementation("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
+	// Mezz config
+	implementation("maven.modrinth:7tEfOcA7:7KlSXRjC")
 	compileOnly("curse.maven:immersive-portal-1511174:8937391")
 	testImplementation(platform("org.junit:junit-bom:5.13.4"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
